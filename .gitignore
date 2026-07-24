@@ -1,0 +1,18 @@
+# CCS build output
+Debug/
+Release/
+
+# Compiler and linker artifacts
+*.o
+*.obj
+*.d
+*.out
+*.map
+*.elf
+*.hex
+*.bin
+
+# Editor and OS files
+.vs/
+.DS_Store
+Thumbs.db
