@@ -1,0 +1,375 @@
+/**
+ * @file    oled.c
+ * @brief   SSD1306 OLED 驱动实现 (I2C 接口, 128x64)
+ *
+ * @note    I2C 外设 (OLED_I2C_INST = I2C1): SDA=PA10, SCL=PA11
+ *          I2C 初始化由 SysConfig 生成的 SYSCFG_DL_OLED_init() 完成
+ *          使用页寻址模式, 6x8 ASCII 字体
+ */
+
+#include "oled.h"
+#include "delay.h"
+
+/*===========================================================================
+ * 6x8 ASCII 字体 (0x20 ' ' ~ 0x7E '~')
+ * 每字符 6 字节, 列优先排列, bit0=顶部像素
+ *===========================================================================*/
+
+static const uint8_t FONT_6x8[][6] = {
+    {0x00, 0x00, 0x00, 0x00, 0x00, 0x00}, /*   */
+    {0x00, 0x00, 0x5F, 0x00, 0x00, 0x00}, /* ! */
+    {0x00, 0x07, 0x00, 0x07, 0x00, 0x00}, /* " */
+    {0x14, 0x7F, 0x14, 0x7F, 0x14, 0x00}, /* # */
+    {0x24, 0x2A, 0x7F, 0x2A, 0x12, 0x00}, /* $ */
+    {0x23, 0x13, 0x08, 0x64, 0x62, 0x00}, /* % */
+    {0x36, 0x49, 0x55, 0x22, 0x50, 0x00}, /* & */
+    {0x00, 0x05, 0x03, 0x00, 0x00, 0x00}, /* ' */
+    {0x00, 0x1C, 0x22, 0x41, 0x00, 0x00}, /* ( */
+    {0x00, 0x41, 0x22, 0x1C, 0x00, 0x00}, /* ) */
+    {0x08, 0x2A, 0x1C, 0x2A, 0x08, 0x00}, /* * */
+    {0x08, 0x08, 0x3E, 0x08, 0x08, 0x00}, /* + */
+    {0x00, 0x50, 0x30, 0x00, 0x00, 0x00}, /* , */
+    {0x08, 0x08, 0x08, 0x08, 0x08, 0x00}, /* - */
+    {0x00, 0x60, 0x60, 0x00, 0x00, 0x00}, /* . */
+    {0x20, 0x10, 0x08, 0x04, 0x02, 0x00}, /* / */
+    {0x3E, 0x51, 0x49, 0x45, 0x3E, 0x00}, /* 0 */
+    {0x00, 0x42, 0x7F, 0x40, 0x00, 0x00}, /* 1 */
+    {0x42, 0x61, 0x51, 0x49, 0x46, 0x00}, /* 2 */
+    {0x21, 0x41, 0x45, 0x4B, 0x31, 0x00}, /* 3 */
+    {0x18, 0x14, 0x12, 0x7F, 0x10, 0x00}, /* 4 */
+    {0x27, 0x45, 0x45, 0x45, 0x39, 0x00}, /* 5 */
+    {0x3C, 0x4A, 0x49, 0x49, 0x30, 0x00}, /* 6 */
+    {0x01, 0x71, 0x09, 0x05, 0x03, 0x00}, /* 7 */
+    {0x36, 0x49, 0x49, 0x49, 0x36, 0x00}, /* 8 */
+    {0x06, 0x49, 0x49, 0x29, 0x1E, 0x00}, /* 9 */
+    {0x00, 0x36, 0x36, 0x00, 0x00, 0x00}, /* : */
+    {0x00, 0x56, 0x36, 0x00, 0x00, 0x00}, /* ; */
+    {0x00, 0x08, 0x14, 0x22, 0x41, 0x00}, /* < */
+    {0x14, 0x14, 0x14, 0x14, 0x14, 0x00}, /* = */
+    {0x41, 0x22, 0x14, 0x08, 0x00, 0x00}, /* > */
+    {0x02, 0x01, 0x51, 0x09, 0x06, 0x00}, /* ? */
+    {0x32, 0x49, 0x79, 0x41, 0x3E, 0x00}, /* @ */
+    {0x7E, 0x11, 0x11, 0x11, 0x7E, 0x00}, /* A */
+    {0x7F, 0x49, 0x49, 0x49, 0x36, 0x00}, /* B */
+    {0x3E, 0x41, 0x41, 0x41, 0x22, 0x00}, /* C */
+    {0x7F, 0x41, 0x41, 0x22, 0x1C, 0x00}, /* D */
+    {0x7F, 0x49, 0x49, 0x49, 0x41, 0x00}, /* E */
+    {0x7F, 0x09, 0x09, 0x01, 0x01, 0x00}, /* F */
+    {0x3E, 0x41, 0x41, 0x51, 0x72, 0x00}, /* G */
+    {0x7F, 0x08, 0x08, 0x08, 0x7F, 0x00}, /* H */
+    {0x00, 0x41, 0x7F, 0x41, 0x00, 0x00}, /* I */
+    {0x20, 0x40, 0x41, 0x3F, 0x01, 0x00}, /* J */
+    {0x7F, 0x08, 0x14, 0x22, 0x41, 0x00}, /* K */
+    {0x7F, 0x40, 0x40, 0x40, 0x40, 0x00}, /* L */
+    {0x7F, 0x02, 0x04, 0x02, 0x7F, 0x00}, /* M */
+    {0x7F, 0x04, 0x08, 0x10, 0x7F, 0x00}, /* N */
+    {0x3E, 0x41, 0x41, 0x41, 0x3E, 0x00}, /* O */
+    {0x7F, 0x09, 0x09, 0x09, 0x06, 0x00}, /* P */
+    {0x3E, 0x41, 0x51, 0x21, 0x5E, 0x00}, /* Q */
+    {0x7F, 0x09, 0x19, 0x29, 0x46, 0x00}, /* R */
+    {0x46, 0x49, 0x49, 0x49, 0x31, 0x00}, /* S */
+    {0x01, 0x01, 0x7F, 0x01, 0x01, 0x00}, /* T */
+    {0x3F, 0x40, 0x40, 0x40, 0x3F, 0x00}, /* U */
+    {0x1F, 0x20, 0x40, 0x20, 0x1F, 0x00}, /* V */
+    {0x7F, 0x20, 0x18, 0x20, 0x7F, 0x00}, /* W */
+    {0x63, 0x14, 0x08, 0x14, 0x63, 0x00}, /* X */
+    {0x03, 0x04, 0x78, 0x04, 0x03, 0x00}, /* Y */
+    {0x61, 0x51, 0x49, 0x45, 0x43, 0x00}, /* Z */
+    {0x00, 0x00, 0x7F, 0x41, 0x41, 0x00}, /* [ */
+    {0x02, 0x04, 0x08, 0x10, 0x20, 0x00}, /* \ */
+    {0x41, 0x41, 0x7F, 0x00, 0x00, 0x00}, /* ] */
+    {0x04, 0x02, 0x01, 0x02, 0x04, 0x00}, /* ^ */
+    {0x40, 0x40, 0x40, 0x40, 0x40, 0x00}, /* _ */
+    {0x00, 0x01, 0x02, 0x04, 0x00, 0x00}, /* ` */
+    {0x20, 0x54, 0x54, 0x54, 0x78, 0x00}, /* a */
+    {0x7F, 0x48, 0x44, 0x44, 0x38, 0x00}, /* b */
+    {0x38, 0x44, 0x44, 0x44, 0x20, 0x00}, /* c */
+    {0x38, 0x44, 0x44, 0x48, 0x7F, 0x00}, /* d */
+    {0x38, 0x54, 0x54, 0x54, 0x18, 0x00}, /* e */
+    {0x08, 0x7E, 0x09, 0x01, 0x02, 0x00}, /* f */
+    {0x08, 0x14, 0x54, 0x54, 0x3C, 0x00}, /* g */
+    {0x7F, 0x08, 0x04, 0x04, 0x78, 0x00}, /* h */
+    {0x00, 0x44, 0x7D, 0x40, 0x00, 0x00}, /* i */
+    {0x20, 0x40, 0x44, 0x3D, 0x00, 0x00}, /* j */
+    {0x00, 0x7F, 0x10, 0x28, 0x44, 0x00}, /* k */
+    {0x00, 0x41, 0x7F, 0x40, 0x00, 0x00}, /* l */
+    {0x7C, 0x04, 0x18, 0x04, 0x78, 0x00}, /* m */
+    {0x7C, 0x08, 0x04, 0x04, 0x78, 0x00}, /* n */
+    {0x38, 0x44, 0x44, 0x44, 0x38, 0x00}, /* o */
+    {0x7C, 0x14, 0x14, 0x14, 0x08, 0x00}, /* p */
+    {0x08, 0x14, 0x14, 0x18, 0x7C, 0x00}, /* q */
+    {0x7C, 0x08, 0x04, 0x04, 0x08, 0x00}, /* r */
+    {0x48, 0x54, 0x54, 0x54, 0x20, 0x00}, /* s */
+    {0x04, 0x3F, 0x44, 0x40, 0x20, 0x00}, /* t */
+    {0x3C, 0x40, 0x40, 0x20, 0x7C, 0x00}, /* u */
+    {0x1C, 0x20, 0x40, 0x20, 0x1C, 0x00}, /* v */
+    {0x3C, 0x40, 0x30, 0x40, 0x3C, 0x00}, /* w */
+    {0x44, 0x28, 0x10, 0x28, 0x44, 0x00}, /* x */
+    {0x0C, 0x50, 0x50, 0x50, 0x3C, 0x00}, /* y */
+    {0x44, 0x64, 0x54, 0x4C, 0x44, 0x00}, /* z */
+    {0x00, 0x08, 0x36, 0x41, 0x00, 0x00}, /* { */
+    {0x00, 0x00, 0x7F, 0x00, 0x00, 0x00}, /* | */
+    {0x00, 0x41, 0x36, 0x08, 0x00, 0x00}, /* } */
+    {0x08, 0x04, 0x08, 0x10, 0x08, 0x00}, /* ~ */
+};
+
+/*===========================================================================
+ * 内部辅助函数
+ *===========================================================================*/
+
+/**
+ * @brief  通过 I2C 向 SSD1306 发送数据 (命令或显存数据)
+ * @param  ctrl  控制字节: OLED_CTRL_CMD 或 OLED_CTRL_DATA
+ * @param  data  待发送数据缓冲区
+ * @param  len   数据长度 (字节), 不含控制字节
+ *
+ * @note   FIFO 深度为 8，每块最多发 8 字节 (1 控制 + 7 数据)
+ *         长数据自动拆分为多个 I2C 事务发送
+ */
+static void OLED_Write(uint8_t ctrl, const uint8_t *data, uint16_t len)
+{
+    uint8_t  buf[9];             /* 1 控制字节 + 最多 8 数据字节 */
+    uint16_t sent = 0;           /* 已发送数据字节数 */
+
+    while (sent < len) {
+        uint16_t remaining = len - sent;
+        uint16_t data_chunk = (remaining > 7) ? 7 : remaining;
+
+        /* 构造发送缓冲区: 控制字节 + 数据块 */
+        buf[0] = ctrl;
+        uint16_t i;
+        for (i = 0; i < data_chunk; i++) {
+            buf[i + 1] = data[sent + i];
+        }
+
+        uint16_t chunk_len = data_chunk + 1;
+        uint16_t filled = DL_I2C_fillControllerTXFIFO(OLED_I2C_INST, buf, chunk_len);
+        DL_I2C_startControllerTransfer(OLED_I2C_INST, OLED_I2C_ADDR,
+            DL_I2C_CONTROLLER_DIRECTION_TX, filled);
+
+        /* 等待传输完成 */
+        while (!(DL_I2C_getControllerStatus(OLED_I2C_INST)
+               & DL_I2C_CONTROLLER_STATUS_IDLE)) {
+        }
+
+        /* 检查传输错误 */
+        if (DL_I2C_getControllerStatus(OLED_I2C_INST)
+            & DL_I2C_CONTROLLER_STATUS_ERROR) {
+            DL_I2C_resetControllerTransfer(OLED_I2C_INST);
+            return;
+        }
+
+        sent += data_chunk;
+    }
+}
+
+/** @brief 发送单条命令 */
+static void OLED_WriteCmd(uint8_t cmd)
+{
+    OLED_Write(OLED_CTRL_CMD, &cmd, 1);
+}
+
+/** @brief 发送多条命令 (初始化序列用) */
+static void OLED_WriteCmds(const uint8_t *cmds, uint16_t len)
+{
+    OLED_Write(OLED_CTRL_CMD, cmds, len);
+}
+
+/*===========================================================================
+ * 公开函数实现
+ *===========================================================================*/
+
+/**
+ * @brief  SSD1306 上电初始化序列
+ *
+ * @note   调用前需先执行 SYSCFG_DL_init(),
+ *         该函数会调用 SYSCFG_DL_OLED_init() 完成 I2C 引脚/时钟/控制器配置
+ */
+void OLED_Init(void)
+{
+    /* ---- 1. 等待 OLED 上电稳定 (至少 100ms) ---- */
+    delay_ms(120);
+
+    /* ---- 2. SSD1306 初始化命令序列 ---- */
+    /* clang-format off */
+    const uint8_t init_cmds[] = {
+        OLED_CMD_DISPLAY_OFF,           /* 0xAE: 关闭显示         */
+        0xD5, 0x80,                     /* 设置时钟分频/振荡频率   */
+        OLED_CMD_SET_MUX_RATIO, 0x3F,   /* 0xA8: 多路复用 64      */
+        OLED_CMD_SET_DISPLAY_OFFSET, 0x00, /* 0xD3: 显示偏移 0    */
+        OLED_CMD_SET_START_LINE | 0x00, /* 0x40: 起始行 0         */
+        OLED_CMD_CHARGE_PUMP, 0x14,     /* 0x8D: 启用电荷泵       */
+        OLED_CMD_MEM_ADDR_MODE, OLED_ADDR_MODE_PAGE, /* 页寻址   */
+        OLED_CMD_SEG_REMAP | 0x01,      /* 0xA1: 列重映射          */
+        OLED_CMD_COM_SCAN_DIR | 0x08,   /* 0xC8: COM 扫描方向      */
+        OLED_CMD_SET_COM_PINS, 0x12,    /* 0xDA: COM 引脚配置      */
+        OLED_CMD_SET_CONTRAST, 0x7F,    /* 0x81: 对比度 127        */
+        OLED_CMD_SET_PRECHARGE, 0xF1,   /* 0xD9: 预充电周期        */
+        OLED_CMD_SET_VCOMD, 0x40,       /* 0xDB: VCOMH 电压        */
+        OLED_CMD_ENTIRE_DISPLAY_ON,     /* 0xA5: 全屏点亮          */
+        OLED_CMD_RESUME_TO_RAM,         /* 0xA4: 恢复显示 RAM 内容  */
+        OLED_CMD_NORMAL_DISPLAY,        /* 0xA6: 正常显示          */
+        OLED_CMD_DEACTIVATE_SCROLL,     /* 0x2E: 停用滚动          */
+        OLED_CMD_DISPLAY_ON,            /* 0xAF: 开启显示          */
+    };
+    /* clang-format on */
+
+    OLED_WriteCmds(init_cmds, sizeof(init_cmds));
+
+    /* ---- 3. 清屏 ---- */
+    OLED_Clear();
+}
+
+/** @brief 清屏 — 将所有 GDDRAM 写入 0x00 */
+void OLED_Clear(void)
+{
+    uint8_t page, i;
+    uint8_t zero_buf[OLED_WIDTH];
+
+    for (i = 0; i < OLED_WIDTH; i++) {
+        zero_buf[i] = 0x00;
+    }
+
+    for (page = 0; page < OLED_PAGES; page++) {
+        OLED_SetCursor(page, 0);
+        OLED_Write(OLED_CTRL_DATA, zero_buf, OLED_WIDTH);
+    }
+    OLED_SetCursor(0, 0);
+}
+
+/** @brief 全屏填充 — 将所有 GDDRAM 写入 0xFF */
+void OLED_Fill(void)
+{
+    uint8_t page, i;
+    uint8_t fill_buf[OLED_WIDTH];
+
+    for (i = 0; i < OLED_WIDTH; i++) {
+        fill_buf[i] = 0xFF;
+    }
+
+    for (page = 0; page < OLED_PAGES; page++) {
+        OLED_SetCursor(page, 0);
+        OLED_Write(OLED_CTRL_DATA, fill_buf, OLED_WIDTH);
+    }
+    OLED_SetCursor(0, 0);
+}
+
+/** @brief 开启显示 */
+void OLED_DisplayOn(void)
+{
+    OLED_WriteCmd(OLED_CMD_DISPLAY_ON);
+}
+
+/** @brief 关闭显示 (进入休眠模式) */
+void OLED_DisplayOff(void)
+{
+    OLED_WriteCmd(OLED_CMD_DISPLAY_OFF);
+}
+
+/** @brief 设置对比度 */
+void OLED_SetContrast(uint8_t contrast)
+{
+    OLED_WriteCmd(OLED_CMD_SET_CONTRAST);
+    OLED_WriteCmd(contrast);
+}
+
+/**
+ * @brief  设置光标位置 (页寻址模式)
+ * @param  page  页号 [0, 7]
+ * @param  col   列号 [0, 127]
+ */
+void OLED_SetCursor(uint8_t page, uint8_t col)
+{
+    OLED_WriteCmd(0xB0 | (page & 0x07));
+    OLED_WriteCmd(0x00 | (col & 0x0F));
+    OLED_WriteCmd(0x10 | ((col >> 4) & 0x0F));
+}
+
+/**
+ * @brief  在指定位置显示一个 6x8 ASCII 字符
+ * @param  page  页号 [0, 7]
+ * @param  col   列号 [0, 127]
+ * @param  ch    要显示的 ASCII 字符
+ */
+void OLED_ShowChar(uint8_t page, uint8_t col, char ch)
+{
+    if (col + 6 > OLED_WIDTH) return;
+    if (ch < ' ' || ch > '~')  return;
+
+    OLED_SetCursor(page, col);
+    OLED_Write(OLED_CTRL_DATA, FONT_6x8[ch - ' '], 6);
+}
+
+/**
+ * @brief  在指定位置显示字符串
+ * @param  page  起始页号
+ * @param  col   起始列号
+ * @param  str   以 '\0' 结尾的字符串
+ * @note   自动换页 (page+1)，不自动换行到行首
+ */
+void OLED_ShowString(uint8_t page, uint8_t col, const char *str)
+{
+    while (*str) {
+        if (col + 6 > OLED_WIDTH) {
+            col = 0;
+            page++;
+            if (page >= OLED_PAGES) break;
+        }
+        OLED_ShowChar(page, col, *str);
+        col += 6;
+        str++;
+    }
+}
+
+/**
+ * @brief  在指定位置显示有符号整数
+ * @param  num  要显示的整数
+ */
+void OLED_ShowNum(uint8_t page, uint8_t col, int32_t num)
+{
+    char buf[12];
+    uint8_t pos = 0;
+
+    if (num < 0) {
+        buf[pos++] = '-';
+        num = -num;
+    } else if (num == 0) {
+        buf[pos++] = '0';
+    }
+
+    char tmp[10];
+    uint8_t tmp_pos = 0;
+    while (num > 0) {
+        tmp[tmp_pos++] = '0' + (num % 10);
+        num /= 10;
+    }
+    while (tmp_pos > 0) {
+        buf[pos++] = tmp[--tmp_pos];
+    }
+    buf[pos] = '\0';
+
+    OLED_ShowString(page, col, buf);
+}
+
+/**
+ * @brief  显示位图
+ * @param  bmp  位图数据 (按列排列，每字节 8 垂直像素)
+ */
+void OLED_DrawBMP(uint8_t page, uint8_t col,
+                  uint8_t width, uint8_t height, const uint8_t *bmp)
+{
+    uint8_t pages = (height + 7) / 8;
+    uint8_t p, c;
+
+    for (p = 0; p < pages; p++) {
+        uint8_t cur_page = page + p;
+        if (cur_page >= OLED_PAGES) break;
+
+        for (c = 0; c < width; c++) {
+            if (col + c >= OLED_WIDTH) break;
+            OLED_SetCursor(cur_page, col + c);
+            uint16_t bmp_idx = (uint16_t)p * width + c;
+            OLED_Write(OLED_CTRL_DATA, &bmp[bmp_idx], 1);
+        }
+    }
+}
