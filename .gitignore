@@ -1,0 +1,23 @@
+# Keil uVision build artifacts
+Objects/
+Listings/
+*.uvguix.*
+*.uvgui.*
+*.uvoptx
+*.scvd
+*.dep
+*.bak
+*.axf
+*.hex
+*.lnp
+*.plg
+*.tra
+*.iex
+*.htm
+*.build_log.htm
+
+# Editor/OS
+.vscode/
+*.tmp
+Thumbs.db
+Desktop.ini
