@@ -386,52 +386,52 @@
             <File>
               <FileName>stm32f10x_conf.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\user\stm32f10x_conf.h</FilePath>
+              <FilePath>.\MPU9250陀螺仪\user\stm32f10x_conf.h</FilePath>
             </File>
             <File>
               <FileName>stm32f10x_it.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\user\stm32f10x_it.c</FilePath>
+              <FilePath>.\MPU9250陀螺仪\user\stm32f10x_it.c</FilePath>
             </File>
             <File>
               <FileName>stm32f10x_it.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\user\stm32f10x_it.h</FilePath>
+              <FilePath>.\MPU9250陀螺仪\user\stm32f10x_it.h</FilePath>
             </File>
             <File>
               <FileName>main.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\user\main.c</FilePath>
+              <FilePath>.\MPU9250陀螺仪\user\main.c</FilePath>
             </File>
             <File>
               <FileName>LED.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\user\LED.c</FilePath>
+              <FilePath>.\MPU9250陀螺仪\user\LED.c</FilePath>
             </File>
             <File>
               <FileName>LED.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\user\LED.h</FilePath>
+              <FilePath>.\MPU9250陀螺仪\user\LED.h</FilePath>
             </File>
             <File>
               <FileName>Delay.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\user\Delay.c</FilePath>
+              <FilePath>.\MPU9250陀螺仪\user\Delay.c</FilePath>
             </File>
             <File>
               <FileName>Delay.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\user\Delay.h</FilePath>
+              <FilePath>.\MPU9250陀螺仪\user\Delay.h</FilePath>
             </File>
             <File>
               <FileName>OLED.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\user\OLED.c</FilePath>
+              <FilePath>.\MPU9250陀螺仪\user\OLED.c</FilePath>
             </File>
             <File>
               <FileName>OLED.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\user\OLED.h</FilePath>
+              <FilePath>.\MPU9250陀螺仪\user\OLED.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -441,232 +441,232 @@
             <File>
               <FileName>misc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Library\misc.c</FilePath>
+              <FilePath>.\MPU9250陀螺仪\Library\misc.c</FilePath>
             </File>
             <File>
               <FileName>misc.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\Library\misc.h</FilePath>
+              <FilePath>.\MPU9250陀螺仪\Library\misc.h</FilePath>
             </File>
             <File>
               <FileName>stm32f10x_adc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Library\stm32f10x_adc.c</FilePath>
+              <FilePath>.\MPU9250陀螺仪\Library\stm32f10x_adc.c</FilePath>
             </File>
             <File>
               <FileName>stm32f10x_adc.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\Library\stm32f10x_adc.h</FilePath>
+              <FilePath>.\MPU9250陀螺仪\Library\stm32f10x_adc.h</FilePath>
             </File>
             <File>
               <FileName>stm32f10x_bkp.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Library\stm32f10x_bkp.c</FilePath>
+              <FilePath>.\MPU9250陀螺仪\Library\stm32f10x_bkp.c</FilePath>
             </File>
             <File>
               <FileName>stm32f10x_bkp.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\Library\stm32f10x_bkp.h</FilePath>
+              <FilePath>.\MPU9250陀螺仪\Library\stm32f10x_bkp.h</FilePath>
             </File>
             <File>
               <FileName>stm32f10x_can.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Library\stm32f10x_can.c</FilePath>
+              <FilePath>.\MPU9250陀螺仪\Library\stm32f10x_can.c</FilePath>
             </File>
             <File>
               <FileName>stm32f10x_can.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\Library\stm32f10x_can.h</FilePath>
+              <FilePath>.\MPU9250陀螺仪\Library\stm32f10x_can.h</FilePath>
             </File>
             <File>
               <FileName>stm32f10x_cec.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Library\stm32f10x_cec.c</FilePath>
+              <FilePath>.\MPU9250陀螺仪\Library\stm32f10x_cec.c</FilePath>
             </File>
             <File>
               <FileName>stm32f10x_cec.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\Library\stm32f10x_cec.h</FilePath>
+              <FilePath>.\MPU9250陀螺仪\Library\stm32f10x_cec.h</FilePath>
             </File>
             <File>
               <FileName>stm32f10x_crc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Library\stm32f10x_crc.c</FilePath>
+              <FilePath>.\MPU9250陀螺仪\Library\stm32f10x_crc.c</FilePath>
             </File>
             <File>
               <FileName>stm32f10x_crc.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\Library\stm32f10x_crc.h</FilePath>
+              <FilePath>.\MPU9250陀螺仪\Library\stm32f10x_crc.h</FilePath>
             </File>
             <File>
               <FileName>stm32f10x_dac.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Library\stm32f10x_dac.c</FilePath>
+              <FilePath>.\MPU9250陀螺仪\Library\stm32f10x_dac.c</FilePath>
             </File>
             <File>
               <FileName>stm32f10x_dac.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\Library\stm32f10x_dac.h</FilePath>
+              <FilePath>.\MPU9250陀螺仪\Library\stm32f10x_dac.h</FilePath>
             </File>
             <File>
               <FileName>stm32f10x_dbgmcu.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Library\stm32f10x_dbgmcu.c</FilePath>
+              <FilePath>.\MPU9250陀螺仪\Library\stm32f10x_dbgmcu.c</FilePath>
             </File>
             <File>
               <FileName>stm32f10x_dbgmcu.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\Library\stm32f10x_dbgmcu.h</FilePath>
+              <FilePath>.\MPU9250陀螺仪\Library\stm32f10x_dbgmcu.h</FilePath>
             </File>
             <File>
               <FileName>stm32f10x_dma.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Library\stm32f10x_dma.c</FilePath>
+              <FilePath>.\MPU9250陀螺仪\Library\stm32f10x_dma.c</FilePath>
             </File>
             <File>
               <FileName>stm32f10x_dma.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\Library\stm32f10x_dma.h</FilePath>
+              <FilePath>.\MPU9250陀螺仪\Library\stm32f10x_dma.h</FilePath>
             </File>
             <File>
               <FileName>stm32f10x_exti.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Library\stm32f10x_exti.c</FilePath>
+              <FilePath>.\MPU9250陀螺仪\Library\stm32f10x_exti.c</FilePath>
             </File>
             <File>
               <FileName>stm32f10x_exti.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\Library\stm32f10x_exti.h</FilePath>
+              <FilePath>.\MPU9250陀螺仪\Library\stm32f10x_exti.h</FilePath>
             </File>
             <File>
               <FileName>stm32f10x_flash.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Library\stm32f10x_flash.c</FilePath>
+              <FilePath>.\MPU9250陀螺仪\Library\stm32f10x_flash.c</FilePath>
             </File>
             <File>
               <FileName>stm32f10x_flash.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\Library\stm32f10x_flash.h</FilePath>
+              <FilePath>.\MPU9250陀螺仪\Library\stm32f10x_flash.h</FilePath>
             </File>
             <File>
               <FileName>stm32f10x_fsmc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Library\stm32f10x_fsmc.c</FilePath>
+              <FilePath>.\MPU9250陀螺仪\Library\stm32f10x_fsmc.c</FilePath>
             </File>
             <File>
               <FileName>stm32f10x_fsmc.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\Library\stm32f10x_fsmc.h</FilePath>
+              <FilePath>.\MPU9250陀螺仪\Library\stm32f10x_fsmc.h</FilePath>
             </File>
             <File>
               <FileName>stm32f10x_gpio.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Library\stm32f10x_gpio.c</FilePath>
+              <FilePath>.\MPU9250陀螺仪\Library\stm32f10x_gpio.c</FilePath>
             </File>
             <File>
               <FileName>stm32f10x_gpio.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\Library\stm32f10x_gpio.h</FilePath>
+              <FilePath>.\MPU9250陀螺仪\Library\stm32f10x_gpio.h</FilePath>
             </File>
             <File>
               <FileName>stm32f10x_i2c.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Library\stm32f10x_i2c.c</FilePath>
+              <FilePath>.\MPU9250陀螺仪\Library\stm32f10x_i2c.c</FilePath>
             </File>
             <File>
               <FileName>stm32f10x_i2c.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\Library\stm32f10x_i2c.h</FilePath>
+              <FilePath>.\MPU9250陀螺仪\Library\stm32f10x_i2c.h</FilePath>
             </File>
             <File>
               <FileName>stm32f10x_iwdg.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Library\stm32f10x_iwdg.c</FilePath>
+              <FilePath>.\MPU9250陀螺仪\Library\stm32f10x_iwdg.c</FilePath>
             </File>
             <File>
               <FileName>stm32f10x_iwdg.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\Library\stm32f10x_iwdg.h</FilePath>
+              <FilePath>.\MPU9250陀螺仪\Library\stm32f10x_iwdg.h</FilePath>
             </File>
             <File>
               <FileName>stm32f10x_pwr.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Library\stm32f10x_pwr.c</FilePath>
+              <FilePath>.\MPU9250陀螺仪\Library\stm32f10x_pwr.c</FilePath>
             </File>
             <File>
               <FileName>stm32f10x_pwr.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\Library\stm32f10x_pwr.h</FilePath>
+              <FilePath>.\MPU9250陀螺仪\Library\stm32f10x_pwr.h</FilePath>
             </File>
             <File>
               <FileName>stm32f10x_rcc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Library\stm32f10x_rcc.c</FilePath>
+              <FilePath>.\MPU9250陀螺仪\Library\stm32f10x_rcc.c</FilePath>
             </File>
             <File>
               <FileName>stm32f10x_rcc.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\Library\stm32f10x_rcc.h</FilePath>
+              <FilePath>.\MPU9250陀螺仪\Library\stm32f10x_rcc.h</FilePath>
             </File>
             <File>
               <FileName>stm32f10x_rtc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Library\stm32f10x_rtc.c</FilePath>
+              <FilePath>.\MPU9250陀螺仪\Library\stm32f10x_rtc.c</FilePath>
             </File>
             <File>
               <FileName>stm32f10x_rtc.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\Library\stm32f10x_rtc.h</FilePath>
+              <FilePath>.\MPU9250陀螺仪\Library\stm32f10x_rtc.h</FilePath>
             </File>
             <File>
               <FileName>stm32f10x_sdio.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Library\stm32f10x_sdio.c</FilePath>
+              <FilePath>.\MPU9250陀螺仪\Library\stm32f10x_sdio.c</FilePath>
             </File>
             <File>
               <FileName>stm32f10x_sdio.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\Library\stm32f10x_sdio.h</FilePath>
+              <FilePath>.\MPU9250陀螺仪\Library\stm32f10x_sdio.h</FilePath>
             </File>
             <File>
               <FileName>stm32f10x_spi.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Library\stm32f10x_spi.c</FilePath>
+              <FilePath>.\MPU9250陀螺仪\Library\stm32f10x_spi.c</FilePath>
             </File>
             <File>
               <FileName>stm32f10x_spi.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\Library\stm32f10x_spi.h</FilePath>
+              <FilePath>.\MPU9250陀螺仪\Library\stm32f10x_spi.h</FilePath>
             </File>
             <File>
               <FileName>stm32f10x_tim.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Library\stm32f10x_tim.c</FilePath>
+              <FilePath>.\MPU9250陀螺仪\Library\stm32f10x_tim.c</FilePath>
             </File>
             <File>
               <FileName>stm32f10x_tim.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\Library\stm32f10x_tim.h</FilePath>
+              <FilePath>.\MPU9250陀螺仪\Library\stm32f10x_tim.h</FilePath>
             </File>
             <File>
               <FileName>stm32f10x_usart.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Library\stm32f10x_usart.c</FilePath>
+              <FilePath>.\MPU9250陀螺仪\Library\stm32f10x_usart.c</FilePath>
             </File>
             <File>
               <FileName>stm32f10x_usart.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\Library\stm32f10x_usart.h</FilePath>
+              <FilePath>.\MPU9250陀螺仪\Library\stm32f10x_usart.h</FilePath>
             </File>
             <File>
               <FileName>stm32f10x_wwdg.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Library\stm32f10x_wwdg.c</FilePath>
+              <FilePath>.\MPU9250陀螺仪\Library\stm32f10x_wwdg.c</FilePath>
             </File>
             <File>
               <FileName>stm32f10x_wwdg.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\Library\stm32f10x_wwdg.h</FilePath>
+              <FilePath>.\MPU9250陀螺仪\Library\stm32f10x_wwdg.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -676,32 +676,32 @@
             <File>
               <FileName>core_cm3.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Startup\core_cm3.c</FilePath>
+              <FilePath>.\MPU9250陀螺仪\Startup\core_cm3.c</FilePath>
             </File>
             <File>
               <FileName>core_cm3.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\Startup\core_cm3.h</FilePath>
+              <FilePath>.\MPU9250陀螺仪\Startup\core_cm3.h</FilePath>
             </File>
             <File>
               <FileName>stm32f10x.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\Startup\stm32f10x.h</FilePath>
+              <FilePath>.\MPU9250陀螺仪\Startup\stm32f10x.h</FilePath>
             </File>
             <File>
               <FileName>system_stm32f10x.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Startup\system_stm32f10x.c</FilePath>
+              <FilePath>.\MPU9250陀螺仪\Startup\system_stm32f10x.c</FilePath>
             </File>
             <File>
               <FileName>system_stm32f10x.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\Startup\system_stm32f10x.h</FilePath>
+              <FilePath>.\MPU9250陀螺仪\Startup\system_stm32f10x.h</FilePath>
             </File>
             <File>
               <FileName>startup_stm32f10x_md.s</FileName>
               <FileType>2</FileType>
-              <FilePath>.\Startup\startup_stm32f10x_md.s</FilePath>
+              <FilePath>.\MPU9250陀螺仪\Startup\startup_stm32f10x_md.s</FilePath>
             </File>
           </Files>
         </Group>
